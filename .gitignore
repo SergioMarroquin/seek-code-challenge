@@ -1,0 +1,32 @@
+HELP.md
+
+### Compiled Class Files ###
+*.class
+
+### Package Files ###
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.rar
+*.tar.gz
+
+### Eclipse IDE ###
+.settings/
+.project
+.classpath
+.lib
+.metadata/
+
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+
+**/target/
+**/build/
+
+### Visual Studio Code ###
+.vscode/
