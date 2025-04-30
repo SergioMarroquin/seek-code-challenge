@@ -28,7 +28,6 @@ tmp/
 .gradle/
 **/target/
 **/build/
-**/gradle/
 
 ### Visual Studio Code ###
 .vscode/
