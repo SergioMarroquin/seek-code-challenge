@@ -1,9 +1,9 @@
 package com.codechallenge.services;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
-
 import com.codechallenge.entities.Client;
 import com.codechallenge.entities.dto.ClientCalculationsDTO;
 import com.codechallenge.entities.dto.ClientDTO;
@@ -27,7 +27,7 @@ public class ClientService {
 	private final CustomMapper customMapper;
 	private final MetricsUtils metricsUtils;
 	private final CalculationsUtils calculationsUtils;
-	
+
 	private ClientCalculationsDTO buildClientCalculationsDTO(ClientDTO clientDTO) {
 		long daysToBirthday = calculationsUtils.calculateDaysToBirthday(clientDTO.getBirthdate());
 		int lifeNumber = calculationsUtils.calculateLifeNumber(clientDTO.getBirthdate());
@@ -93,15 +93,26 @@ public class ClientService {
 		return customMapper.mapToClientDTO(client);
 	}
 	
+	private static final double D_ZERO = 0D;
+	
 	public ClientMetricsDTO getClientMetrics() {
 		List<Integer> clientAges = clientRepository.findAll().stream().map(Client::getAge).toList();
 		
+		if (Objects.nonNull(clientAges) && !clientAges.isEmpty())
+			return ClientMetricsDTO
+					.builder()
+					.totalClients(clientAges.size())
+					.ageAverage(metricsUtils.calculateAgeAverage(clientAges))
+					.ageVariance(metricsUtils.calculateAgeVariance(clientAges))
+					.ageDeviation(metricsUtils.calculateAgeDeviation(clientAges))
+					.build();
+		
 		return ClientMetricsDTO
 				.builder()
-				.totalClients(clientAges.size())
-				.ageAverage(metricsUtils.calculateAgeAverage(clientAges))
-				.ageVariance(metricsUtils.calculateAgeVariance(clientAges))
-				.ageDeviation(metricsUtils.calculateAgeDeviation(clientAges))
+				.totalClients(0)
+				.ageAverage(D_ZERO)
+				.ageVariance(D_ZERO)
+				.ageDeviation(D_ZERO)
 				.build();
 	}
 }
